@@ -9,16 +9,18 @@ example.baseurl.tld
 baseurl.tld/example
 ```
 
-Regions are of course subject to change, so it's best to assume the region is a wildcard in your regexes.
+Regions are of course subject to change, so it's best to assume the region is a wildcard in your regexes. Known regions are listed here.
 
 ## Amazon (S3)
+
+Cloudfront is not always for S3 buckets and supports subdomain only. 
 
 Source: https://docs.aws.amazon.com/general/latest/gr/rande.html
 
 ```
 s3.amazonaws.com
 s3.<region>.amazonaws.com
-cloudfront.net (sometimes, subdomain only)
+cloudfront.net
 ```
 
 ## Google Storage Buckets (modified S3, should be compatible)
@@ -61,6 +63,16 @@ Source: Just trust me bro
 
 ```
 <region>.vultrobjects.com
+```
+
+## Alibaba Cloud (OSS)
+
+Haven't found a public listing for one of these yet.
+
+Source: https://blog.anynines.com/concourse-configure-s3-resource-to-work-with-alibaba-cloud-oss/
+
+```
+oss-<region>.aliyuncs.com
 ```
 
 ## Backblaze (S3)

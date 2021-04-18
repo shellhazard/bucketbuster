@@ -22,12 +22,13 @@ The program will attempt to fingerprint the URL you provide with a specific clou
 bucketbuster --url https://example.s3.eu-central-1.amazonaws.com -o links.txt
 wget -i ./links.txt
 
-# Enumerate keys in the target Firebase storage bucket and write the keys and URLs to files.csv, then pass to massivedl
+# Enumerate keys in the target Firebase storage bucket and write 
+# the keys and URLs to files.csv, then pass to massivedl
 bucketbuster --url https://firebasestorage.googleapis.com/v0/b/example.appspot.com/o/ --format csv -o files.csv
 massivedl -p 30 -i data.csv
 
 # Start enumeration from a specific key and append key names to output.txt (without overwriting it)
-bucketbuster -u https://example.s3.eu-central-1.amazonaws.com -s uploads/1514910256180.jpg -f key --append
+bucketbuster -u https://example.s3.amazonaws.com -s examplekey -f key --append
 
 ```
 
@@ -43,6 +44,7 @@ bucketbuster -u https://example.s3.eu-central-1.amazonaws.com -s uploads/1514910
 	- List of bucket keys.
 	- List of URLs to pipe into wget.
 	- Key/URL in csv format.
+- Write tests
 - Index multiple buckets simultaneously: Accept list of bucket URLs as input.
 - Support more storage bucket providers/URLs (some boilerplate is there already)
 - Improve logging.

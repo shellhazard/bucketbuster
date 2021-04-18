@@ -9,7 +9,7 @@ example.baseurl.tld
 baseurl.tld/example
 ```
 
-Regions are of course subject to change, so it's best to assume the region is a wildcard in your regexes. Known regions are listed here.
+Regions are of course subject to change, so it's best to assume the region is a wildcard in your regexes.
 
 ## Amazon (S3)
 

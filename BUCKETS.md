@@ -13,12 +13,14 @@ Regions are of course subject to change, so it's best to assume the region is a 
 
 ## Amazon (S3)
 
+Cloudfront is not always for S3 buckets and supports subdomain only. 
+
 Source: https://docs.aws.amazon.com/general/latest/gr/rande.html
 
 ```
 s3.amazonaws.com
 s3.<region>.amazonaws.com
-cloudfront.net (sometimes, subdomain only)
+cloudfront.net
 ```
 
 ## Google Storage Buckets (modified S3, should be compatible)

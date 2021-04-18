@@ -9,8 +9,7 @@ I wanted a tool to index and analyse generic public storage buckets without depe
 ## Install
 
 ```
-git clone https://github.com/unva1idated/bucketbuster
-cd ./bucketbuster && go install
+go install github.com/unva1idated/bucketbuster
 ```
 
 ## Usage

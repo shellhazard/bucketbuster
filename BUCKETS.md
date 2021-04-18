@@ -65,6 +65,16 @@ Source: Just trust me bro
 <region>.vultrobjects.com
 ```
 
+## Alibaba Cloud (OSS)
+
+Haven't found a public listing for one of these yet.
+
+Source: https://blog.anynines.com/concourse-configure-s3-resource-to-work-with-alibaba-cloud-oss/
+
+```
+oss-<region>.aliyuncs.com
+```
+
 ## Backblaze (S3)
 
 Source: https://docs.fastly.com/en/guides/backblaze-b2-cloud-storage

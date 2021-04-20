@@ -1,16 +1,10 @@
 package paginator
 
 import (
-	"fmt"
 	"io"
 	"net/http"
-	"time"
 
 	"github.com/unva1idated/bucketbuster/internal/bucket"
-)
-
-const (
-	esc = 27
 )
 
 // Paginates the target bucket, fetching a page and returning a list
@@ -46,11 +40,4 @@ func Paginate(b bucket.Bucket, paginationKey string) ([]string, string, error) {
 		return nil, "", err
 	}
 	return keys, newPaginationKey, nil
-}
-
-func WritePaginatorStatus(keynum int, elapsed time.Duration) {
-	// Move cursor up and clear line
-	fmt.Printf("%c[%dA", esc)
-	fmt.Printf("%c[2K\r", esc)
-	fmt.Printf("\r\rTime elapsed: %s, Total keys: %d", elapsed.Round(1*time.Second), keynum)
 }

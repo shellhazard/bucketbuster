@@ -5,6 +5,7 @@ package bucket
 import (
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -100,6 +101,9 @@ func (bucket FirestoreBucket) ParsePage(data []byte) ([]string, string, error) {
 type S3Bucket struct {
 	// The base URL of the bucket.
 	baseURL string
+
+	// The generated name of the bucket.
+	name string
 }
 
 // Type S3BucketPage is a helper type for storing XML data.
@@ -122,15 +126,16 @@ type S3BucketPage struct {
 	} `xml:"Contents"`
 }
 
-func NewS3Bucket(baseURL string) S3Bucket {
+func NewS3Bucket(baseURL string, name string) S3Bucket {
 	return S3Bucket{
 		baseURL: baseURL,
+		name:    name,
 	}
 }
 
 // Returns the name of the bucket, which is the URL for a generic S3 bucket.
 func (bucket S3Bucket) Name() string {
-	return bucket.baseURL
+	return bucket.name
 }
 
 // Returns the URL of the bucket.
@@ -175,11 +180,14 @@ func (bucket S3Bucket) ParsePage(data []byte) ([]string, string, error) {
 
 // Attempts to fingerprint the kind of bucket based on the URL.
 // Returns a Bucket object.
-func ParseURL(input string) Bucket {
+func ParseURL(input string) (Bucket, error) {
 	urlData, err := url.Parse(input)
 	if err != nil {
-		fmt.Printf("Couldn't parse input URL: %s", err)
-		return nil
+		return nil, err
+	}
+
+	if urlData.Host == "" {
+		return nil, errors.New("Invalid URL (missing scheme?)")
 	}
 
 	// Parse fragments
@@ -192,12 +200,19 @@ func ParseURL(input string) Bucket {
 		if len(pathFragments) >= 3 {
 			if pathFragments[0] == "v0" && pathFragments[1] == "b" {
 				// Extract name
-				return NewFirestoreBucket(pathFragments[2])
+				return NewFirestoreBucket(pathFragments[2]), nil
 			}
 		}
 	}
 
 	// Otherwise, assume it's a generic generic S3 bucket
 	urlData.RawQuery = ""
-	return NewS3Bucket(urlData.String())
+
+	// Build bucket name
+	name := fmt.Sprintf("%s", urlData.Host)
+	pathstring := strings.Join(pathFragments, "-")
+	if pathstring != "" {
+		name = fmt.Sprintf("%s-%s", urlData.Host, pathstring)
+	}
+	return NewS3Bucket(urlData.String(), name), nil
 }

@@ -43,6 +43,8 @@ bucketbuster -u https://example.s3.amazonaws.com -s examplekey -f key --append
 	- List of bucket keys.
 	- List of URLs to pipe into wget.
 	- Key/URL in csv format.
+- Notify on finding keys with dangerous file extensions: .sql etc.
+- Test bucket validity: Handle errors (NoSuchKey, AccessDenied, NoSuchBucket, PermanentRedirect)
 - Write tests
 - Index multiple buckets simultaneously: Accept list of bucket URLs as input.
 - Support more storage bucket providers/URLs (some boilerplate is there already)

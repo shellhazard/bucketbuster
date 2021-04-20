@@ -1,15 +1,14 @@
 # Cloud providers and known service URLs for storage providers
 
-Last updated 18/04/21.
+Last updated 20/04/21.
 
 Generally, buckets are accessed as such, where `baseurl` may or may not include the region:
 
 ```
 example.baseurl.tld
-baseurl.tld/example
+example.<region>.baseurl.tld
+<region>.baseurl.tld/example
 ```
-
-Regions are of course subject to change, so it's best to assume the region is a wildcard in your regexes. Known regions are listed here.
 
 ## Amazon (S3)
 

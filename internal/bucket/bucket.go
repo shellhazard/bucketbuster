@@ -154,7 +154,11 @@ func (bucket S3Bucket) PageURL(paginationKey string) string {
 // Returns the URL used to fetch the resource with the specified key.
 // TODO: Support extracting download key from metadata.
 func (bucket S3Bucket) ResourceURL(key string) string {
-	return fmt.Sprintf("%s/%s", bucket.URL(), url.QueryEscape(key))
+	burl := bucket.URL()
+	if !strings.HasSuffix(burl, "/") {
+		burl = fmt.Sprintf("%s/", burl)
+	}
+	return fmt.Sprintf("%s%s", burl, url.QueryEscape(key))
 }
 
 // Parses a response to a page request and returns a slice of the keys

@@ -26,16 +26,16 @@ const (
 
 var (
 	// Flags
-	url        string // The URL to parse.
-	startkey   string // The key to start paginating from.
-	outfile    string // The path of the output file.
-	format     string // The format to write the output in.
-	appendFile bool   // Enable or disable appending to the target file instead of overwriting it.
-	verbose    bool   // Enable extended output from buckets.
-
+	url         string // The URL to parse.
+	startkey    string // The key to start paginating from.
+	outfile     string // The path of the output file.
+	format      string // The format to write the output in.
+	appendFile  bool   // Enable or disable appending to the target file instead of overwriting it.
+	verbose     bool   // Enable extended output from buckets.
 	input       string // The list of bucket URLs to index.
 	concurrency int    // The maximum number of buckets to index simultaneously.
 
+	// Loggers
 	log     = logger.New(os.Stderr, "[bucketbuster] ", 0)
 	worklog = logger.New(os.Stderr, "[bucketbuster] ", 0)
 

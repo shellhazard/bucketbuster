@@ -1,6 +1,6 @@
 # Cloud providers and known service URLs for storage providers
 
-Last updated 20/04/21.
+Last updated 23/04/21.
 
 Generally, buckets are accessed as such, where `baseurl` may or may not include the region:
 
@@ -10,6 +10,8 @@ example.<region>.baseurl.tld
 <region>.baseurl.tld/example
 ```
 
+Regexes below are in PCRE format.
+
 ## Amazon (S3)
 
 Cloudfront is not always for S3 buckets and supports subdomain only. 
@@ -18,19 +20,19 @@ Source: https://docs.aws.amazon.com/general/latest/gr/rande.html
 
 ```
 <name>.s3.amazonaws.com
-/[A-Za-z\d-\.]{3,63}\.s3\.amazonaws\.com/g
+(?i)[A-Z\d-\.]{3,63}\.s3\.amazonaws\.com
 
 s3.amazonaws.com/<name>
-/s3\.amazonaws\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)s3\.amazonaws\.com\/[A-Z\d-\.]{3,63}
 
 <name>.s3.<region>.amazonaws.com
-/[A-Za-z\d-\.]{3,63}\.s3\.[A-Za-z\d-]+\.amazonaws\.com/g
+(?i)[A-Z\d-\.]{3,63}\.s3\.[A-Z\d-]+\.amazonaws\.com
 
 s3.<region>.amazonaws.com/<name>
-/s3\.[A-Za-z\d-]\.amazonaws\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)s3\.[A-Z\d-]\.amazonaws\.com\/[A-Z\d-\.]{3,63}
 
 <name>.cloudfront.net
-/[A-Za-z\d-\.]{3,63}\.cloudfront\.net/g
+(?i)[A-Z\d-\.]{3,63}\.cloudfront\.net/g
 ```
 
 ## Google Storage Buckets (modified S3, should be compatible)
@@ -39,13 +41,13 @@ Source: https://cloud.google.com/storage/docs/request-endpoints
 
 ```
 <name>.storage.googleapis.com
-/[A-Za-z\d-\.]{3,63}\.storage\.googleapis\.com/g
+(?i)[A-Z\d-\.]{3,63}\.storage\.googleapis\.com
 
 storage.googleapis.com/<name>
-/storage\.googleapis\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)storage\.googleapis\.com\/[A-Z\d-\.]{3,63}
 
 www.googleapis.com/storage/v1/b/<name>/o/ (not S3 format)
-/www.googleapis\.com\/storage\/v\d\/b\/[A-Za-z\d-\.]{3,63}/g
+(?i)www.googleapis\.com\/storage\/v\d\/b\/[A-Z\d-\.]{3,63}
 ```
 
 ## DigitalOcean Spaces (S3)
@@ -56,10 +58,10 @@ Source: https://docs.digitalocean.com/products/spaces/
 
 ```
 <name>.<region>.digitaloceanspaces.com
-/[A-Za-z\d-\.]{3,63}\.[A-Za-z\d-\.]+\.digitaloceanspaces\.com/g
+(?i)[A-Z\d-\.]{3,63}\.[A-Za-z\d-\.]+\.digitaloceanspaces\.com/g
 
 <region>.digitaloceanspaces.com/<name>
-/[A-Za-z\d-]+\.digitaloceanspaces\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)[A-Z\d-]+\.digitaloceanspaces\.com\/[A-Z\d-\.]{3,63}/g
 ```
 
 ## Azure Blob Storage (S3)
@@ -68,7 +70,7 @@ Buckets can be accessed by subdomain only.
 
 ```
 <name>.blob.core.windows.net
-/[A-Za-z\d-]{3,63}\.blob\.core\.windows\.net/g
+(?i)[A-Z\d-]{3,63}\.blob\.core\.windows\.net
 ```
 
 ## Linode (S3)
@@ -77,10 +79,10 @@ Source: https://status.linode.com
 
 ```
 <name>.<region>.linodeobjects.com
-/[a-z0-09][a-z0-9-]*[a-z0-9]?\.[A-Za-z\d-\.]+\.linodeobjects\.com/g
+(?i)[a-z0-09][a-z0-9-]*[a-z0-9]?\.[A-Za-z\d-\.]+\.linodeobjects\.com
 
 <region>.linodeobjects.com/<name>
-/[A-Za-z\d-\.]+\.linodeobjects\.com\/[a-z0-09][a-z0-9-]*[a-z0-9]?/g
+(?i)[a-z\d-\.]+\.linodeobjects\.com\/[a-z0-09][a-z0-9-]*[a-z0-9]?
 ```
 
 ## Vultr (S3)
@@ -89,10 +91,10 @@ Source: https://www.vultr.com/docs/vultr-object-storage
 
 ```
 <name>.<region>.vultrobjects.com
-/[A-Za-z\d-\.]{1,63}\.[A-Za-z\d-\.]+\.vultrobjects\.com/g
+(?i)[A-Z\d-\.]{1,63}\.[A-Z\d-\.]+\.vultrobjects\.com
 
 <region>.vultrobjects.com/<name>
-/[A-Za-z\d-\.]+\.vultrobjects\.com\/[A-Za-z\d-\.]{1,255}/g
+(?i)[A-Z\d-\.]+\.vultrobjects\.com\/[A-Z\d-\.]{1,255}
 ```
 
 ## Backblaze (S3 after May 4th, 2020)
@@ -103,10 +105,10 @@ Source: https://docs.fastly.com/en/guides/backblaze-b2-cloud-storage
 
 ```
 <name>.s3.<region>.backblazeb2.com
-/[A-Za-z\d-]{6,50}\.s3\.[A-Za-z\d-]+\.backblazeb2\.com/g
+(?i)[A-Z\d-]{6,50}\.s3\.[A-Z\d-]+\.backblazeb2\.com
 
 s3.<region>.backblazeb2.com/<name>
-/s3\.[A-Za-z\d-]+\.backblazeb2\.com\/[A-Za-z\d-]{6,50}/g
+(?i)s3\.[A-Z\d-]+\.backblazeb2\.com\/[A-Z\d-]{6,50}
 ```
 
 ## Wasabi (S3)
@@ -115,16 +117,16 @@ Source: https://wasabi-support.zendesk.com/hc/en-us/articles/360015106031-What-a
 
 ```
 <name>.s3.wasabisys.com
-/[A-Za-z\d-\.]{3,63}\.s3\.wasabisys\.com/g
+(?i)[A-Z\d-\.]{3,63}\.s3\.wasabisys\.com
 
 s3.wasabisys.com/<name>
-/s3\.wasabisys\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)s3\.wasabisys\.com\/[A-Z\d-\.]{3,63}
 
 <name>.s3.<region>.wasabisys.com
-/[A-Za-z\d-\.]{3,63}\.s3\.[A-Za-z\d-]+\.wasabisys\.com/g
+(?i)[A-Z\d-\.]{3,63}\.s3\.[A-Z\d-]+\.wasabisys\.com
 
 s3.<region>.wasabisys.com/<name>
-/s3\.[A-Za-z\d-]\.wasabisys\.com\/[A-Za-z\d-\.]{3,63}/g
+(?i)s3\.[A-Z\d-]\.wasabisys\.com\/[A-Z\d-\.]{3,63}
 ```
 
 ## DreamHost (S3)
@@ -135,10 +137,10 @@ Source: https://help.dreamhost.com/hc/en-us/articles/215253408-How-to-create-a-D
 
 ```
 <name>.objects-<region>.dream.io
-/[A-Za-z\d-]{3,63}\.objects-[A-Za-z\d-]+\.dream\.io/g
+(?i)[A-Z\d-]{3,63}\.objects-[A-Z\d-]+\.dream\.io
 
 objects-<region>.dream.io
-/objects-[A-Za-z\d-]+\.dream\.io\/[A-Za-z\d-]{3,63}/g
+(?i)objects-[A-Z\d-]+\.dream\.io\/[A-Z\d-]{3,63}
 ```
 
 ## IBM Cloud Object Storage (S3)
@@ -147,10 +149,10 @@ Source: https://cloud.ibm.com/objectstorage/
 
 ```
 <name>.s3.<region>.cloud-object-storage.appdomain.cloud
-/[A-Za-z\d-\.]{3,63}\.s3\.[A-Za-z\d-]+\.cloud-object-storage\.appdomain\.cloud/g
+(?i)[A-Z\d-\.]{3,63}\.s3\.[A-Z\d-]+\.cloud-object-storage\.appdomain\.cloud
 
 s3.<region>.cloud-object-storage.appdomain.cloud/<name>
-/s3\.[A-Za-z\d-]+\.cloud-object-storage\.appdomain\.cloud\/[A-Za-z\d-\.]{3,63}/g
+(?i)s3\.[A-Z\d-]+\.cloud-object-storage\.appdomain\.cloud\/[A-Z\d-\.]{3,63}
 ```
 
 ## Firebase Storage (custom protocol)
@@ -159,7 +161,7 @@ Source: https://firebase.google.com/docs/storage/web/download-files
 
 ```
 firebasestorage.googleapis.com/v0/b/<name>.appspot.com/o/
-/firebasestorage\.googleapis\.com\/v\d\/b\/[A-Za-z\d-\.]+/g
+(?i)firebasestorage\.googleapis\.com\/v\d\/b\/[A-Z\d-\.]+
 ```
 
 ## Generic S3 catcher
@@ -168,16 +170,16 @@ Very rough. Regexes should be used in listed order to prevent mismatching.
 
 ```
 <name>.s3.<region>.<domain>.<tld>
-/[A-Za-z\d-\.]+\.s3\.[A-Za-z\d-]+\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}/g
+(?i)[A-Za-z\d-\.]+\.s3\.[A-Za-z\d-]+\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}
 
 s3.<region>.<domain>.<tld>/<name>
-/s3\.[A-Za-z\d-]+\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}\/[A-Za-z\d-\.]+/g
+(?i)s3\.[A-Za-z\d-]+\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}\/[A-Za-z\d-\.]+
 
 <name>.s3.<domain>.<tld>
-/[A-Za-z\d-\.]+\.s3\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}/g
+(?i)[A-Za-z\d-\.]+\.s3\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}
 
 s3.<domain>.<tld>/<name>
-/s3\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}\/[A-Za-z\d-\.]+/g
+(?i)s3\.[A-Za-z\d-]+\.[A-Za-z\d-]{2,63}\/[A-Za-z\d-\.]+
 ```
 
 

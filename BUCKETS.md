@@ -31,6 +31,9 @@ s3.amazonaws.com/<name>
 s3.<region>.amazonaws.com/<name>
 (?i)s3\.[A-Z\d-]\.amazonaws\.com\/[A-Z\d-\.]{3,63}
 
+s3-<region>.amazonaws.com/<name>
+(?i)s3-[A-Z\d-\.]+\.amazonaws\.com\/[A-Z\d-\.]{3,63}
+
 <name>.cloudfront.net
 (?i)[A-Z\d-\.]{3,63}\.cloudfront\.net/g
 ```
@@ -58,10 +61,10 @@ Source: https://docs.digitalocean.com/products/spaces/
 
 ```
 <name>.<region>.digitaloceanspaces.com
-(?i)[A-Z\d-\.]{3,63}\.[A-Za-z\d-\.]+\.digitaloceanspaces\.com/g
+(?i)[A-Z\d-\.]{3,63}\.[A-Za-z\d-\.]+\.digitaloceanspaces\.com
 
 <region>.digitaloceanspaces.com/<name>
-(?i)[A-Z\d-]+\.digitaloceanspaces\.com\/[A-Z\d-\.]{3,63}/g
+(?i)[A-Z\d-]+\.digitaloceanspaces\.com\/[A-Z\d-\.]{3,63}
 ```
 
 ## Azure Blob Storage (S3)

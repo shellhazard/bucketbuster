@@ -165,7 +165,7 @@ func Execute() {
 
 func IndexBucket(b bucket.Bucket, keyCounter *int64, startedBuckets *int64, completedBuckets *int64, single bool) {
 	// Prepare state
-	var keys []string
+	// var keys []string
 	paginationKey := ""
 	if single {
 		paginationKey = startkey
@@ -237,7 +237,7 @@ func IndexBucket(b bucket.Bucket, keyCounter *int64, startedBuckets *int64, comp
 		// This way even if our program is cancelled, we can resume
 		// from the most recent key.
 		for _, k := range newKeys {
-			keys = append(keys, k)
+			// keys = append(keys, k) // Storing all these keys leaks memory for no real reason.
 			atomic.AddInt64(keyCounter, 1)
 
 			var writestr string

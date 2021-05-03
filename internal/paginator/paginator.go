@@ -15,11 +15,7 @@ func Paginate(b bucket.Bucket, paginationKey string) ([]string, string, error) {
 	var targetURL string
 
 	// Use the provided pagination key if not empty.
-	if paginationKey == "" {
-		targetURL = b.URL()
-	} else {
-		targetURL = b.PageURL(paginationKey)
-	}
+	targetURL = b.PageURL(paginationKey)
 
 	// Fetch the target page.
 	resp, err := http.Get(targetURL)

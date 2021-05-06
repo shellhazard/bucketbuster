@@ -14,7 +14,7 @@ go install github.com/unva1idated/bucketbuster@latest
 
 ## Usage
 
-The program will attempt to fingerprint the URL you provide with a specific cloud provider (Firebase). If it can't find a match, it will assume your provided URL is the root of a generic S3 compatible storage bucket.
+The program will attempt to fingerprint the URL you provide with a specific cloud provider. If it can't find a match, it will assume your provided URL is the root of a generic S3 compatible storage bucket.
 
 ```
 # Enumerate keys in the target S3 bucket and write their URLs to links.txt, then pass to wget

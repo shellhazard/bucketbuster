@@ -160,7 +160,7 @@ func (bucket AzureStorageBucket) PageURL(paginationKey string) string {
 	if paginationKey == "" {
 		return fmt.Sprintf("%s?restype=container&comp=list", bucket.URL())
 	}
-	return fmt.Sprintf("%s?restype=container&comp=list&marker=%s", bucket.URL(), paginationKey)
+	return fmt.Sprintf("%s?restype=container&comp=list&marker=%s", bucket.URL(), url.QueryEscape(paginationKey))
 }
 
 // Returns the URL used to fetch the resource with the specified key.
@@ -188,6 +188,86 @@ func (bucket AzureStorageBucket) ParsePage(data []byte) ([]string, string, error
 	}
 	if page.NextMarker != "" {
 		token = page.NextMarker
+	}
+	return keys, token, nil
+}
+
+// Type GoogleStorageBucket represents a Google Cloud Storage bucket.
+type GoogleStorageBucket struct {
+	// The name of the bucket.
+	name string
+}
+
+// Type GoogleStorageBucketPage is a helper type for storing XML data.
+type GoogleStorageBucketPage struct {
+	XMLName     xml.Name `xml:"ListBucketResult"`
+	Text        string   `xml:",chardata"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Name        string   `xml:"Name"`
+	Prefix      string   `xml:"Prefix"`
+	Marker      string   `xml:"Marker"`
+	NextMarker  string   `xml:"NextMarker"`
+	IsTruncated bool     `xml:"IsTruncated"`
+	Contents    []struct {
+		Text           string `xml:",chardata"`
+		Key            string `xml:"Key"`
+		Generation     string `xml:"Generation"`
+		MetaGeneration string `xml:"MetaGeneration"`
+		LastModified   string `xml:"LastModified"`
+		ETag           string `xml:"ETag"`
+		Size           string `xml:"Size"`
+	} `xml:"Contents"`
+}
+
+func NewGoogleStorageBucket(name string) GoogleStorageBucket {
+	return GoogleStorageBucket{
+		name: name,
+	}
+}
+
+// Returns the name of the bucket, which is the URL for a generic S3 bucket.
+func (bucket GoogleStorageBucket) Name() string {
+	return bucket.name
+}
+
+// Returns the URL of the bucket.
+func (bucket GoogleStorageBucket) URL() string {
+	return fmt.Sprintf("https://%s.storage.googleapis.com/", bucket.name)
+}
+
+// Returns the URL pointing to the position in the bucket indicated by the pagination key.
+func (bucket GoogleStorageBucket) PageURL(paginationKey string) string {
+	if paginationKey == "" {
+		return bucket.URL()
+	}
+	return fmt.Sprintf("%s?marker=%s", bucket.URL(), url.QueryEscape(paginationKey))
+}
+
+// Returns the URL used to fetch the resource with the specified key.
+// TODO: Support extracting download key from metadata.
+func (bucket GoogleStorageBucket) ResourceURL(key string) string {
+	burl := bucket.URL()
+	if !strings.HasSuffix(burl, "/") {
+		burl = fmt.Sprintf("%s/", burl)
+	}
+	return fmt.Sprintf("%s%s", burl, url.QueryEscape(key))
+}
+
+// Parses a response to a page request and returns a slice of the keys
+// and the next pagination key if applicable.
+func (bucket GoogleStorageBucket) ParsePage(data []byte) ([]string, string, error) {
+	var keys []string
+	var page GoogleStorageBucketPage
+	var token string
+	err := xml.Unmarshal(data, &page)
+	if err != nil {
+		return nil, "", err
+	}
+	for _, k := range page.Contents {
+		keys = append(keys, k.Key)
+	}
+	if page.IsTruncated {
+		token = keys[len(keys)-1]
 	}
 	return keys, token, nil
 }
@@ -243,7 +323,7 @@ func (bucket S3Bucket) PageURL(paginationKey string) string {
 	if paginationKey == "" {
 		return bucket.URL()
 	}
-	return fmt.Sprintf("%s?list-type=2&start-after=%s", bucket.URL(), paginationKey)
+	return fmt.Sprintf("%s?list-type=2&start-after=%s", bucket.URL(), url.QueryEscape(paginationKey))
 }
 
 // Returns the URL used to fetch the resource with the specified key.
@@ -295,6 +375,9 @@ func ParseURL(input string) (Bucket, error) {
 
 	// Fingerprint Firestore buckets
 	matched, err := regexp.Match(`(?i)firebasestorage\.googleapis\.com\/v\d\/b\/[A-Za-z\d-\.]+`, []byte(input))
+	if err != nil {
+		return nil, err
+	}
 	if matched {
 		if len(pathFragments) >= 3 {
 			if pathFragments[0] == "v0" && pathFragments[1] == "b" {
@@ -306,12 +389,41 @@ func ParseURL(input string) (Bucket, error) {
 
 	// Fingerprint Azure buckets
 	matched, err = regexp.Match(`(?i)[A-Z\d-]{3,63}\.blob\.core\.windows\.net`, []byte(input))
+	if err != nil {
+		return nil, err
+	}
 	if matched {
 		if len(pathFragments) >= 1 && len(hostFragments) >= 5 {
 			// Extract name
 			reversedHostFragments := hostFragments
 			utils.ReverseAny(reversedHostFragments)
 			return NewAzureStorageBucket(reversedHostFragments[4], pathFragments[0]), nil
+		}
+	}
+
+	// Fingerprint Google Storage buckets
+	// Name in subdomain
+	matched, err = regexp.Match(`(?i)[A-Z\d-\.]{3,63}\.storage\.googleapis\.com`, []byte(input))
+	if err != nil {
+		return nil, err
+	}
+	if matched {
+		if len(hostFragments) >= 4 {
+			// Extract name
+			reversedHostFragments := hostFragments
+			utils.ReverseAny(reversedHostFragments)
+			return NewGoogleStorageBucket(reversedHostFragments[3]), nil
+		}
+	}
+
+	// Name in path
+	matched, err = regexp.Match(`(?i)storage\.googleapis\.com\/[A-Z\d-\.]{3,63}`, []byte(input))
+	if err != nil {
+		return nil, err
+	}
+	if matched {
+		if len(pathFragments) >= 1 {
+			return NewGoogleStorageBucket(pathFragments[0]), nil
 		}
 	}
 

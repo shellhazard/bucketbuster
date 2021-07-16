@@ -43,7 +43,7 @@ var (
 		Use:   "bucketbuster",
 		Short: "Tool for indexing public storage buckets.",
 		Long: `A standalone tool to analyse and index public Amazon S3 
-and Google Cloud Storage buckets. See github.com/unva1idated/bucketbuster`,
+and Google Cloud Storage buckets. See github.com/shellhazard/bucketbuster`,
 		Run: func(cmd *cobra.Command, args []string) {
 			log.Printf("Starting Bucketbuster %s.\n", version)
 

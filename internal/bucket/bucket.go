@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/unva1idated/bucketbuster/internal/utils"
+	"github.com/shellhazard/bucketbuster/internal/utils"
 )
 
 // Interface Bucket defines a deconstructed storage bucket.

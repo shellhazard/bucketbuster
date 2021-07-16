@@ -1,4 +1,4 @@
-module github.com/unva1idated/bucketbuster
+module github.com/shellhazard/bucketbuster
 
 go 1.16
 

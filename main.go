@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/unva1idated/bucketbuster/cmd"
+	"github.com/shellhazard/bucketbuster/cmd"
 )
 
 func main() {

@@ -12,9 +12,9 @@ import (
 
 	logger "log"
 
+	"github.com/shellhazard/bucketbuster/internal/bucket"
+	"github.com/shellhazard/bucketbuster/internal/paginator"
 	"github.com/spf13/cobra"
-	"github.com/unva1idated/bucketbuster/internal/bucket"
-	"github.com/unva1idated/bucketbuster/internal/paginator"
 )
 
 const (
@@ -106,7 +106,7 @@ and Google Cloud Storage buckets. See github.com/shellhazard/bucketbuster`,
 				for scanner.Scan() {
 					b, err := bucket.ParseURL(scanner.Text())
 					if err != nil {
-						log.Printf("Error parsing URL: %s")
+						log.Printf("Error parsing URL: %s", err)
 						continue
 					}
 					sem <- true
@@ -184,10 +184,10 @@ func IndexBucket(b bucket.Bucket, keyCounter *int64, startedBuckets *int64, comp
 	var file *os.File
 	_, err := os.Stat(filename)
 	if err == nil && appendFile {
-		worklog.Println("Appending to existing file %s", filename)
+		worklog.Printf("Appending to existing file %s", filename)
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error opening outfile: %s", err)
+			fmt.Fprintf(os.Stderr, "Error opening outfile: %s\n", err)
 			os.Exit(1)
 		}
 		file = f
@@ -195,7 +195,7 @@ func IndexBucket(b bucket.Bucket, keyCounter *int64, startedBuckets *int64, comp
 		worklog.Printf("Creating new file %s.", filename)
 		f, err := os.Create(filename)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error creating outfile: %s", err)
+			fmt.Fprintf(os.Stderr, "Error creating outfile: %s\n", err)
 			os.Exit(1)
 		}
 		file = f

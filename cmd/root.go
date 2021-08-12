@@ -12,7 +12,7 @@ import (
 
 	logger "log"
 
-	"github.com/shellhazard/bucketbuster/internal/bucket"
+	"github.com/shellhazard/bucketbuster/bucket"
 	"github.com/shellhazard/bucketbuster/internal/paginator"
 	"github.com/spf13/cobra"
 )

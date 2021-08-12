@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/shellhazard/bucketbuster/internal/bucket"
+	"github.com/shellhazard/bucketbuster/bucket"
 )
 
 // Paginates the target bucket, fetching a page and returning a list

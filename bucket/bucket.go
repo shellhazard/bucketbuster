@@ -25,7 +25,7 @@ type Bucket interface {
 	// Returns a URL to download a specific resource in the bucket.
 	ResourceURL(string) string
 
-	// Parses page data and returns a list of keys found and the next pagination key if applicable
+	// Parses page data and returns a list of keys found and the next pagination key if applicable.
 	ParsePage([]byte) ([]string, string, error)
 }
 
